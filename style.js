@@ -127,6 +127,7 @@ function processLess() {
                     doneOne();
                 });
             }
+
             if (lessFilePool[index].indexOf('.css') != -1) {
                 fs.readFile(lessFilePool[index], function(e, data) {
                     if (e) {
