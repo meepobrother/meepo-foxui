@@ -1,6 +1,6 @@
 {
-    "name": "imeepos-runnerpro",
-    "version": "1.0.25",
+    "name": "@imeepos/foxui",
+    "version": "1.0.0",
     "description": "我的ng包描述",
     "main": "./bundles/meepo.umd.js",
     "module": "./esm5/meepo.js",
@@ -8,7 +8,7 @@
     "typings": "./meepo.d.ts",
     "scripts": {
         "prebuild": "find ./ -name '.DS_Store' | xargs rm -rf",
-        "build": "bash ./build.sh",
+        "build": "bash ./build.sh && npm publish",
         "git": "git add . && git commit -m 'save to back' && git push origin master"
     },
     "repository": {

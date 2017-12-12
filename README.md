@@ -31,6 +31,12 @@ npm run build && npm publish
 npm install --save 包名
 ```
 
+```
+find ./src/ -name "*.js" | xargs rm -rf
+find ./src/ -name "*.d.ts" | xargs rm -rf
+find ./src/ -name "*.js.map" | xargs rm -rf
+```
+
 
 ```ts
 import { 模块 } from {包名}
