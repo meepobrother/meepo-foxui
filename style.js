@@ -17,7 +17,6 @@ let htmlRegex = /templateUrl\s*:\s*\'(\S*?)\'/g;
 let stringRegex = /(['"])((?:[^\\]\\\1|.)*?)\1/g;
 let lessNumRegex = /style_(\d+)_less/g;
 
-
 function getTsFile(path, parse) {
     try {
         if (fs.statSync(path).isFile() && tsFileTester.test(path)) {
@@ -47,6 +46,10 @@ function transformStyleUrls(path) {
         })
         fs.writeFileSync(path, contentTemp);
     }
+}
+
+function transformHtmlUrls(path) {
+    let content = fs.readFileSync(path);
     if (htmlRegex.test(content)) {
         let contentTemp = content.toString().replace(htmlRegex, function(match, url) {
             let filePath = pathUtil.resolve(pathUtil.dirname(path), url);
@@ -93,7 +96,7 @@ function processLess() {
                             filename: lessFilePool[index]
                         }, function(e, output) {
                             if (e) {
-                                lessFilePool[index] = '';
+                                console.log(e);
                             } else {
                                 lessFilePool[index] = output.css.replace(/\\e/g, function(match, e) {
                                     // 对content中的类似'\e630'中的\e进行处理
@@ -120,7 +123,7 @@ function processLess() {
                     file: lessFilePool[index]
                 }, function(e, output) {
                     if (e) {
-                        lessFilePool[index] = '';
+                        console.log(e);
                     } else {
                         lessFilePool[index] = output.css;
                     }
@@ -131,7 +134,7 @@ function processLess() {
             if (lessFilePool[index].indexOf('.css') != -1) {
                 fs.readFile(lessFilePool[index], function(e, data) {
                     if (e) {
-                        lessFilePool[index] = '';
+                        console.log(e)
                     } else {
                         lessFilePool[index] = data.toString();
                     }
@@ -144,9 +147,10 @@ function processLess() {
     }
 }
 
-async function process() {
+function process() {
     // 把所有ts文件，引入的less文件的完整路径放到全局list里面, 并且对源文件进行占坑
-    await getTsFile(genPath, transformStyleUrls);
+    getTsFile(genPath, transformStyleUrls);
+    getTsFile(genPath, transformHtmlUrls);
     // 重置文件处理进度的计数器
     handledLessFileCount = 0;
     // 对list里面的每一个less文件进行翻译并触发css回写
